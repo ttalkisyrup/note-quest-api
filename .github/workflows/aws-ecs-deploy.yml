@@ -9,6 +9,7 @@ env:
   ECR_REPOSITORY: ${{ secrets.ECR_REPOSITORY }}
   ECS_SERVICE: ${{ secrets.ECS_SERVICE }}
   ECS_CLUSTER: ${{ secrets.ECS_CLUSTER }}
+  ECS_TASK_DEFINITION: ${{ secrets.ECS_TASK_DEFINITION }}
   CONTAINER_NAME: ${{ secrets.CONTAINER_NAME }}
 
 
@@ -59,7 +60,7 @@ jobs:
     - name: Download Task Definition Template
       run: |
         aws ecs describe-task-definition \
-          --task-definition $ \
+          --task-definition ${{ env.ECS_TASK_DEFINITION }} \
           --query taskDefinition \
           > task-definition.json
 
