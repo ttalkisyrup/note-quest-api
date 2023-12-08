@@ -1,6 +1,7 @@
-package com.ttalksisyrup.note.quest.api.domain.pitch;
+package com.ttalksisyrup.note.quest.api.domain.pitch.controller;
 
 import com.ttalksisyrup.note.quest.api.common.model.dto.ResponseDto;
+import com.ttalksisyrup.note.quest.api.domain.pitch.service.PitchService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;

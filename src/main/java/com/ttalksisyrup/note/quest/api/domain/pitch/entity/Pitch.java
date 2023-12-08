@@ -1,7 +1,12 @@
-package com.ttalksisyrup.note.quest.api.domain.pitch;
+package com.ttalksisyrup.note.quest.api.domain.pitch.entity;
 
 import com.ttalksisyrup.note.quest.api.common.model.entity.BaseTimeEntity;
-import jakarta.persistence.*;
+import jakarta.persistence.Entity;
+import jakarta.persistence.EntityListeners;
+import jakarta.persistence.Id;
+import jakarta.persistence.Table;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.Column;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;

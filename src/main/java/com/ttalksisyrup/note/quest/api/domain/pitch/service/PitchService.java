@@ -1,8 +1,9 @@
-package com.ttalksisyrup.note.quest.api.domain.pitch;
+package com.ttalksisyrup.note.quest.api.domain.pitch.service;
 
+import com.ttalksisyrup.note.quest.api.domain.pitch.entity.Pitch;
+import com.ttalksisyrup.note.quest.api.domain.pitch.repository.PitchRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
