@@ -45,6 +45,9 @@ public class User extends BaseTimeEntity {
     @Column(nullable = false, columnDefinition = "VARCHAR(255) COMMENT '인증 업체 측 user의 고유 id'")
     private String providerId;
 
+    @Column(columnDefinition = "VARCHAR(512) COMMENT '액세스 토큰'")
+    private String accessToken;
+
     @Column(columnDefinition = "VARCHAR(512) COMMENT '리프래시 토큰'")
     private String refreshToken;
 }
