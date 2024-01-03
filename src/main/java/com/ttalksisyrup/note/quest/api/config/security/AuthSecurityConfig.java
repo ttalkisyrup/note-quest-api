@@ -28,8 +28,8 @@ public class AuthSecurityConfig {
                 .csrf(AbstractHttpConfigurer::disable)
                 .logout(logout -> logout.logoutSuccessUrl("/"))
                 .oauth2Login(oauth2 -> oauth2
-                        .successHandler(oAuth2SuccessHandler)
-                        .userInfoEndpoint(userInfoEndpoint -> userInfoEndpoint.userService(customOAuth2UserService)));
+                        .userInfoEndpoint(userInfoEndpoint -> userInfoEndpoint.userService(customOAuth2UserService))
+                        .successHandler(oAuth2SuccessHandler));
 
         return http.build();
     }

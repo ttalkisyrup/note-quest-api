@@ -1,5 +1,8 @@
 package com.ttalksisyrup.note.quest.api.common.security.oauth;
 
+import com.ttalksisyrup.note.quest.api.common.security.JwtProvider;
+import com.ttalksisyrup.note.quest.api.common.type.JwtPair;
+import com.ttalksisyrup.note.quest.api.domain.user.dto.OAuth2UserDto;
 import com.ttalksisyrup.note.quest.api.domain.user.entity.User;
 import com.ttalksisyrup.note.quest.api.domain.user.repository.UserRepository;
 import com.ttalksisyrup.note.quest.api.domain.user.type.UserRole;
@@ -15,31 +18,31 @@ import java.util.Map;
 
 @Service
 @RequiredArgsConstructor
-public class CustomOAuth2UserService implements OAuth2UserService {
+public class CustomOAuth2UserService implements OAuth2UserService<OAuth2UserRequest, OAuth2User> {
     private final UserRepository userRepository;
+    private final JwtProvider jwtProvider;
 
     @Override
     public OAuth2User loadUser(OAuth2UserRequest userRequest) throws OAuth2AuthenticationException {
-        System.out.println("OAuth2User: " + userRequest);
+        OAuth2User oAuth2User = new DefaultOAuth2UserService().loadUser(userRequest);
+        OAuth2Attribute oAuth2Attribute = getOAuth2Attribute(userRequest, oAuth2User);
 
-        OAuth2UserService<OAuth2UserRequest, OAuth2User> oAuth2UserService = new DefaultOAuth2UserService();
-        OAuth2User oAuth2User = oAuth2UserService.loadUser(userRequest);
-
-        String provider = userRequest.getClientRegistration().getRegistrationId();
-        Map<String, Object> attributes = oAuth2User.getAttributes();
-        OAuth2Attribute oAuth2Attribute = OAuth2Attribute.of(provider, attributes);
-
-        User user = userRepository
+        User tmpUser = userRepository
                 .findByProviderAndProviderId(oAuth2Attribute.getProvider(), oAuth2Attribute.getProviderId())
                 .orElseGet(() -> createUser(oAuth2Attribute));
+        User user = userRepository.save(tmpUser);
 
-        // TODO 유저의 id와 email을 가지고 토큰 발급
-
-        // TODO refreshToken 업데이트
-
+        JwtPair jwtPair = jwtProvider.generateTokenPair(user.getId());
+        user.setTokens(jwtPair);
         userRepository.save(user);
 
-        return oAuth2User;
+        return new OAuth2UserDto(user, jwtPair, oAuth2Attribute.getAttributes());
+    }
+
+    private OAuth2Attribute getOAuth2Attribute(OAuth2UserRequest userRequest, OAuth2User oAuth2User) {
+        String provider = userRequest.getClientRegistration().getRegistrationId();
+        Map<String, Object> attributes = oAuth2User.getAttributes();
+        return OAuth2Attribute.of(provider, attributes);
     }
 
     private User createUser(OAuth2Attribute oAuth2Attribute) {

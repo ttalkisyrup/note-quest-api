@@ -1,6 +1,7 @@
 package com.ttalksisyrup.note.quest.api.domain.user.entity;
 
 import com.ttalksisyrup.note.quest.api.common.model.entity.BaseTimeEntity;
+import com.ttalksisyrup.note.quest.api.common.type.JwtPair;
 import com.ttalksisyrup.note.quest.api.domain.user.type.UserProvider;
 import com.ttalksisyrup.note.quest.api.domain.user.type.UserRole;
 import jakarta.persistence.Column;
@@ -50,4 +51,17 @@ public class User extends BaseTimeEntity {
 
     @Column(columnDefinition = "VARCHAR(512) COMMENT '리프래시 토큰'")
     private String refreshToken;
+
+    public void setAccessToken(String accessToken) {
+        this.accessToken = accessToken;
+    }
+
+    public void setRefreshToken(String refreshToken) {
+        this.refreshToken = refreshToken;
+    }
+
+    public void setTokens(JwtPair jwtPair) {
+        setAccessToken(jwtPair.getAccessToken());
+        setRefreshToken(jwtPair.getRefreshToken());
+    }
 }
